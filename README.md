@@ -1,1 +1,1 @@
-# burger-api
+# Burgers API
