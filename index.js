@@ -1,12 +1,25 @@
-var express = require('express');
+var express    = require('express')
+    app        = express(),
+    bodyParser = require('body-parser'),
+    mongoose   = require('mongoose')
+    config     = require('./config');
 
 
-var app = express();
+mongoose.Promise = global.Promise;
+mongoose.connect(config.MONGO_URL, {
+  useMongoClient: true,
+});
+
+app.use(bodyParser.urlencoded({extended: true}));
 
 
 app.get('/', function(req, res) {
   res.send('hello world');
+  console.log('hello world');
 });
 
 
-app.listen(3000);
+
+app.listen(3000, function() {
+  console.log("Server is listening...");
+});
