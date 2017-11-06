@@ -1,0 +1,20 @@
+version: '2'
+
+services:
+
+  api:
+    build: .
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/burgers-api
+      - /burgers-api/node_modules
+    depends_on:
+      - "mongo"
+
+  mongo:
+    image: mongo:3.4
+    volumes:
+      - ~/.docker-volumes/burgers-api/mongo/:/data/db
+    ports:
+      - "27017:27017"

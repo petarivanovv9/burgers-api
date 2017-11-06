@@ -1,0 +1,22 @@
+{
+  "name": "burgers-api",
+  "version": "1.0.0",
+  "description": "burgers api",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Petar Ivanov",
+  "license": "MIT",
+  "dependencies": {
+    "body-parser": "^1.17.1",
+    "cors": "^2.8.3",
+    "express": "^4.15.2",
+    "mongoose": "^4.13.0"
+  },
+  "devDependencies": {
+    "nodemon": "^1.11.0"
+  }
+}
