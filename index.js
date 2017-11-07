@@ -7,6 +7,8 @@ var express    = require('express'),
     mongoose   = require('mongoose'),
     config     = require('./config');
 
+var burgersRoutes = require('./routes/burgers');
+
 
 mongoose.Promise = global.Promise;
 mongoose.connect(config.MONGO_URL, {
@@ -14,6 +16,7 @@ mongoose.connect(config.MONGO_URL, {
 });
 
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 
 
 app.get('/', function(req, res) {
@@ -21,6 +24,8 @@ app.get('/', function(req, res) {
   console.log('hello world');
 });
 
+
+app.use("/", burgersRoutes);
 
 
 app.listen(3000, function() {
