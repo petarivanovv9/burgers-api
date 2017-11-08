@@ -9,6 +9,8 @@ var express    = require('express'),
     config     = require('./config'),
     rateLimit  = require('./lib/rate_limit'),
     useCors    = require('./lib/cors');
+var sentry     = require('./lib/sentry');
+var { errorHandler, notFoundError } = require('./lib/error_handler');
 
 var burgersRoutes = require('./routes/burgers');
 
@@ -18,6 +20,12 @@ mongoose.connect(config.MONGO_URL, {
   useMongoClient: true,
 });
 
+app.use(sentry.reqHandler());
+
+// DOCUMENTATION FOR THE NEXT 2 LINES
+app.use(require('helmet')());
+app.use(require('express-validator')());
+
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // parse application/json
@@ -26,14 +34,18 @@ app.use(bodyParser.json());
 var port = process.env.PORT || 3000;
 
 
+
+
 app.use('/api/v1/burgers', useCors(), rateLimit, burgersRoutes);
+app.use('*', (req, res, next) => next(notFoundError("No endpoint found that matches " + req.originalUrl)));
 
-// middleware to handle entering wrong route on the site
-app.use(function(req, res) {
-  res.status(404).send({ url: req.originalUrl + ' not found' })
-});
+app.use(sentry.errHandler());
+
+app.use(errorHandler);
 
 
-app.listen(port, function() {
+app.listen(port, function(err) {
+  if (err) throw err;
+
   console.log("Server is listening...");
 });
