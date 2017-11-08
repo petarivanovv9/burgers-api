@@ -1,72 +1,22 @@
 'use strict';
 
 var express = require('express');
-var router  = express.Router({ mergeParams: true});
+var router  = express.Router({ mergeParams: true });
 var Burger  = require('../models/burger');
+var burgerController = require('../controllers/burger');
 
 
 router.route('/')
-
-  .post(function(req, res) {
-
-    var burger = new Burger();
-    burger.name        = req.body.name;
-    burger.description = req.body.description;
-    burger.image_url   = req.body.image_url;
-    burger.ingredients = req.body.ingredients;
-
-    burger.save(function(err) {
-      if (err)
-        res.send(err);
-
-      res.json(({ message: 'Burger created!' }));
-    });
-
-  })
-
-  .get(function(req, res) {
-    Burger.find(function(err, burgers) {
-      if (err)
-        res.send(err);
-
-      res.json(burgers);
-    });
-  });
+  .get(burgerController.list_all_burgers)
+  .post(burgerController.create_a_burger);
 
 
 router.route('/random')
-
-  .get(function(req, res) {
-    Burger.count().exec(function(err, count) {
-      if (err)
-        res.send(err);
-
-      // add LODASH LIB for random func
-      var random = Math.floor(Math.random() * count);
-      Burger.findOne().skip(random).exec(function(err, result) {
-        if (err)
-          res.send(err)
-
-        res.json([result]);
-      });
-    });
-  });
+  .get(burgerController.read_a_random_burger);
 
 
 router.route('/:burger_id')
-
-  .get(function(req, res) {
-    var burger_id = req.params.burger_id;
-    Burger.findById(burger_id, function(err, burger) {
-      if (err)
-        res.send(err);
-
-      res.json([burger]);
-    });
-  });
-
-
-
+  .get(burgerController.read_a_burger);
 
 
 module.exports = router;
