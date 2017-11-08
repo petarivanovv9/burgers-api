@@ -5,7 +5,7 @@ var router  = express.Router({ mergeParams: true});
 var Burger  = require('../models/burger');
 
 
-router.route('/burgers')
+router.route('/')
 
   .post(function(req, res) {
 
@@ -33,7 +33,27 @@ router.route('/burgers')
     });
   });
 
-router.route('/burgers/:burger_id')
+
+router.route('/random')
+
+  .get(function(req, res) {
+    Burger.count().exec(function(err, count) {
+      if (err)
+        res.send(err);
+
+      // add LODASH LIB for random func
+      var random = Math.floor(Math.random() * count);
+      Burger.findOne().skip(random).exec(function(err, result) {
+        if (err)
+          res.send(err)
+
+        res.json([result]);
+      });
+    });
+  });
+
+
+router.route('/:burger_id')
 
   .get(function(req, res) {
     var burger_id = req.params.burger_id;
@@ -41,9 +61,12 @@ router.route('/burgers/:burger_id')
       if (err)
         res.send(err);
 
-      res.json(burger);
+      res.json([burger]);
     });
   });
+
+
+
 
 
 module.exports = router;

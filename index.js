@@ -3,6 +3,7 @@
 
 var express    = require('express'),
     app        = express(),
+    router     = express.Router(),
     bodyParser = require('body-parser'),
     mongoose   = require('mongoose'),
     config     = require('./config');
@@ -18,16 +19,13 @@ mongoose.connect(config.MONGO_URL, {
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-
-app.get('/', function(req, res) {
-  res.json({ message: 'Welcome to the burgers api!' });
-  console.log('hello world');
-});
+var port = process.env.PORT || 3000;
 
 
-app.use("/", burgersRoutes);
+app.use('/api/v1/burgers', burgersRoutes);
 
 
-app.listen(3000, function() {
+
+app.listen(port, function() {
   console.log("Server is listening...");
 });
