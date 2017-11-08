@@ -6,7 +6,8 @@ var express    = require('express'),
     router     = express.Router(),
     bodyParser = require('body-parser'),
     mongoose   = require('mongoose'),
-    config     = require('./config');
+    config     = require('./config'),
+    rateLimit  = require('./lib/rate_limit');
 
 var burgersRoutes = require('./routes/burgers');
 
@@ -17,12 +18,14 @@ mongoose.connect(config.MONGO_URL, {
 });
 
 app.use(bodyParser.urlencoded({ extended: true }));
+
+// parse application/json
 app.use(bodyParser.json());
 
 var port = process.env.PORT || 3000;
 
 
-app.use('/api/v1/burgers', burgersRoutes);
+app.use('/api/v1/burgers', rateLimit, burgersRoutes);
 
 // middleware to handle entering wrong route on the site
 app.use(function(req, res) {
