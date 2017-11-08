@@ -24,6 +24,10 @@ var port = process.env.PORT || 3000;
 
 app.use('/api/v1/burgers', burgersRoutes);
 
+// middleware to handle entering wrong route on the site
+app.use(function(req, res) {
+  res.status(404).send({ url: req.originalUrl + ' not found' })
+});
 
 
 app.listen(port, function() {

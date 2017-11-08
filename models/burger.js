@@ -8,7 +8,12 @@ var burgerSchema = mongoose.Schema({
   name: String,
   description: String,
   image_url: String,
-  ingredients: [String],
+  ingredients: [
+    {
+      name: String,
+      description: String
+    }
+  ]
 });
 
 

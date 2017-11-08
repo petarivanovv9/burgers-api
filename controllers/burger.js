@@ -4,21 +4,25 @@ var Burger  = require('../models/burger');
 
 
 exports.list_all_burgers = function(req, res) {
-  Burger.find({}, function(err, burgers) {
-    if (err)
-      res.send(err);
+  if ( ! req.query.burger_name ) {
+    Burger.find({}, function(err, burgers) {
+      if (err)
+        res.send(err);
 
-    res.json(burgers);
-  });
+      res.json(burgers);
+    });
+  } else {
+    read_a_burger_by_name(req, res);
+  }
 };
 
 
 exports.create_a_burger = function(req, res) {
-  var new_burger = new Burger();
-  new_burger.name        = req.body.name;
-  new_burger.description = req.body.description;
-  new_burger.image_url   = req.body.image_url;
-  new_burger.ingredients = req.body.ingredients;
+  var new_burger = new Burger(req.body);
+  // new_burger.name        = req.body.name;
+  // new_burger.description = req.body.description;
+  // new_burger.image_url   = req.body.image_url;
+  // new_burger.ingredients = req.body.ingredients;
 
   new_burger.save(function(err) {
     if (err)
@@ -55,3 +59,14 @@ exports.read_a_burger = function(req, res) {
     res.json([burger]);
   });
 };
+
+
+var read_a_burger_by_name = function(req, res) {
+  var burger_name = req.query.burger_name;
+  Burger.find({ "name": burger_name }, function(err, burger) {
+    if (err)
+      res.send(err);
+
+    res.json(burger);
+  });
+}
