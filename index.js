@@ -7,7 +7,8 @@ var express    = require('express'),
     bodyParser = require('body-parser'),
     mongoose   = require('mongoose'),
     config     = require('./config'),
-    rateLimit  = require('./lib/rate_limit');
+    rateLimit  = require('./lib/rate_limit'),
+    useCors    = require('./lib/cors');
 
 var burgersRoutes = require('./routes/burgers');
 
@@ -25,7 +26,7 @@ app.use(bodyParser.json());
 var port = process.env.PORT || 3000;
 
 
-app.use('/api/v1/burgers', rateLimit, burgersRoutes);
+app.use('/api/v1/burgers', useCors(), rateLimit, burgersRoutes);
 
 // middleware to handle entering wrong route on the site
 app.use(function(req, res) {
