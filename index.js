@@ -48,4 +48,8 @@ app.listen(port, function(err) {
   if (err) throw err;
 
   console.log("Server is listening...");
+  console.log("pid is " + process.pid);
 });
+
+
+module.exports = app

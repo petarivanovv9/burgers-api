@@ -1,0 +1,7 @@
+--require test/helper
+
+--reporter spec
+
+test/**/*.js
+
+--timeout 10000

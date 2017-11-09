@@ -3,6 +3,7 @@
 var Burger  = require('../models/burger');
 var { notFoundError, validationError } = require('../lib/error_handler');
 
+var isEmpty = require('lodash/isEmpty');
 
 exports.list_all_burgers = function(req, res, next) {
 
@@ -26,6 +27,9 @@ exports.list_all_burgers = function(req, res, next) {
 
   var errors = req.validationErrors();
 
+  console.log("params: " + req.params);
+  console.log("query: " + req.query[0]);
+
   if (errors) {
     return next(validationError(errors));
   }
@@ -35,7 +39,7 @@ exports.list_all_burgers = function(req, res, next) {
   if ( ! req.query.burger_name ) {
     pagination(req, res);
   } else {
-    read_a_burger_by_name(req, res);
+    read_a_burger_by_name(req, res, next);
   }
 };
 
@@ -94,24 +98,26 @@ exports.read_a_burger = function(req, res, next) {
   }
 
   var burger_id = req.params.burger_id;
-  Burger.findById(burger_id, function(err, burger) {
-    if (err)
+  Burger.find({ "_id": burger_id }, function(err, burger) {
+    if (err || isEmpty(burger)) {
       next(notFoundError(`No burger found that matches the ID ${burger_id}`));
-
-    res.status(200);
-    res.json([burger]);
+    } else {
+      res.status(200);
+      res.json([burger]);
+    }
   });
 };
 
 
-function read_a_burger_by_name(req, res) {
+function read_a_burger_by_name(req, res, next) {
   var burger_name = req.query.burger_name;
   Burger.find({ "name": burger_name }, function(err, burger) {
-    if (err)
-      res.send(err);
-
-    res.status(200);
-    res.json(burger);
+    if (err || isEmpty(burger)) {
+      next(notFoundError(`No burger found that matches the name ${burger_name}`));
+    } else {
+      res.status(200);
+      res.json(burger);
+    }
   });
 }
 
