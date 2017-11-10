@@ -27,9 +27,6 @@ exports.list_all_burgers = function(req, res, next) {
 
   var errors = req.validationErrors();
 
-  console.log("params: " + req.params);
-  console.log("query: " + req.query[0]);
-
   if (errors) {
     return next(validationError(errors));
   }
@@ -46,17 +43,13 @@ exports.list_all_burgers = function(req, res, next) {
 
 exports.create_a_burger = function(req, res) {
   var new_burger = new Burger(req.body);
-  // new_burger.name        = req.body.name;
-  // new_burger.description = req.body.description;
-  // new_burger.image_url   = req.body.image_url;
-  // new_burger.ingredients = req.body.ingredients;
 
-  new_burger.save(function(err) {
+  new_burger.save(function(err, burger) {
     if (err)
       res.send(err);
 
     res.status(200);
-    res.json({ message: 'Burger created!' });
+    res.json({ message: 'Burger created!', burger });
   });
 };
 

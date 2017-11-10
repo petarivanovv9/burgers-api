@@ -3,21 +3,54 @@
 var request = require('supertest');
 var app     = require('../../index');
 
+var mongoose = require('mongoose');
+var Burger = require('../../models/burger');
+
 var chai     = require('chai');
 var expect   = chai.expect;
+var should   = chai.should();
 var chaiHttp = require('chai-http');
 
 chai.use(chaiHttp);
 
 
-describe('/api/v1/burgers/:id', function() {
+describe('/GET burger -> /api/v1/burgers/:id', function() {
 
-  // SHOULD USE MOCK, sinon lib
+  beforeEach((done) => {
+    Burger.remove({}, (err) => {
+      done();
+    });
+  });
 
-  // get burger via :ID
+  after((done) => {
+    Burger.remove({}, (err) => {
+      done();
+    });
+  });
 
+  it('it should GET a burger by the given id', function(done) {
+    var burger = new Burger({
+      name: "testing",
+      description: "testing GET by id"
+    });
+    burger.save(function(err, burger) {
+      request(app)
+        .get('/api/v1/burgers/' + burger.id)
+        .send(burger)
+        .end(function(err, res) {
+          expect(res.statusCode).to.equal(200);
+          expect(res).to.be.json;
+          expect(res.body).to.be.an('array');
+          expect(res.body).to.have.lengthOf(1);
+          console.log(res.body);
+          // expect(res.body[0][0]).to.have.any.keys('_id');
+          res.body[0][0].should.have.property('_id').eql(burger.id);
+          done();
+        });
+    });
+  });
 
-  it('should return 404 if id doesn\'t match', function(done) {
+  it('should return 404 if ID doesn\'t match', function(done) {
     request(app)
       .get('/api/v1/burgers/5a02d4b515b9ad18970ea9fb')
       .end(function(err, res) {
