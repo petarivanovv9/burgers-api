@@ -31,8 +31,6 @@ exports.list_all_burgers = function(req, res, next) {
     return next(validationError(errors));
   }
 
-
-
   if ( ! req.query.burger_name ) {
     pagination(req, res);
   } else {

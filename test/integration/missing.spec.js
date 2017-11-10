@@ -1,11 +1,6 @@
 'use strict';
 
-var request = require('supertest');
-var app     = require('../../index');
-
-var chai     = require('chai');
-var expect   = chai.expect;
-var chaiHttp = require('chai-http');
+var helper = require('../helper');
 
 chai.use(chaiHttp);
 

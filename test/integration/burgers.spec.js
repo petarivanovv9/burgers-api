@@ -1,29 +1,9 @@
 'use strict';
 
-var request = require('supertest');
-var app     = require('../../index');
-
-var mongoose = require('mongoose');
-var Burger = require('../../models/burger');
-
-var chai     = require('chai');
-var expect   = chai.expect;
-var should   = chai.should();
-var chaiHttp = require('chai-http');
+var helper = require('../helper');
 
 chai.use(chaiHttp);
 
-
-function create_some_number_of_burgers(number_of_burgers) {
-  var i;
-  for (i = 0; i < 30; i++) {
-    var burger = new Burger({
-      name: "testing_" + i,
-      description: "testing /burgers" + i
-    });
-    burger.save();
-  }
-}
 
 describe('/GET burgers -> /api/v1/burgers', function() {
 
@@ -41,7 +21,7 @@ describe('/GET burgers -> /api/v1/burgers', function() {
 
   it('should return 25 burgers by default', function(done) {
 
-    create_some_number_of_burgers(30);
+    helper.create_some_number_of_burgers(30);
 
     request(app)
       .get('/api/v1/burgers')
@@ -56,7 +36,7 @@ describe('/GET burgers -> /api/v1/burgers', function() {
 
   it('should return a burger with name testing_1', function(done) {
 
-    create_some_number_of_burgers(3);
+    helper.create_some_number_of_burgers(3);
 
     request(app)
       .get('/api/v1/burgers?burger_name=testing_1')
@@ -72,7 +52,7 @@ describe('/GET burgers -> /api/v1/burgers', function() {
 
   it('should return 5 burgers per page', function(done) {
 
-    create_some_number_of_burgers(7);
+    helper.create_some_number_of_burgers(7);
 
     request(app)
       .get('/api/v1/burgers?per_page=5')
@@ -88,7 +68,7 @@ describe('/GET burgers -> /api/v1/burgers', function() {
 
   it('should return 3 burgers on page 2', function(done) {
 
-    create_some_number_of_burgers(7);
+    helper.create_some_number_of_burgers(7);
 
     request(app)
       .get('/api/v1/burgers?per_page=3&page=2')

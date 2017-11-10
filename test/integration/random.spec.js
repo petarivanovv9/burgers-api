@@ -1,30 +1,8 @@
 'use strict';
 
-var mongoose = require('mongoose');
-
-var request = require('supertest');
-var app     = require('../../index');
-
-var mongoose = require('mongoose');
-var Burger = require('../../models/burger');
-
-var chai     = require('chai');
-var expect   = chai.expect;
-var chaiHttp = require('chai-http');
+var helper = require('../helper');
 
 chai.use(chaiHttp);
-
-
-function create_some_number_of_burgers(number_of_burgers) {
-  var i;
-  for (i = 0; i < 30; i++) {
-    var burger = new Burger({
-      name: "testing_" + i,
-      description: "testing /burgers" + i
-    });
-    burger.save();
-  }
-}
 
 
 describe('/api/v1/burgers/random', function() {
@@ -43,7 +21,7 @@ describe('/api/v1/burgers/random', function() {
 
   it('should return one burger at random', function(done) {
 
-    create_some_number_of_burgers(3);
+    helper.create_some_number_of_burgers(3);
 
     request(app)
       .get('/api/v1/burgers/random')

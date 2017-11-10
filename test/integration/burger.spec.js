@@ -1,15 +1,6 @@
 'use strict';
 
-var request = require('supertest');
-var app     = require('../../index');
-
-var mongoose = require('mongoose');
-var Burger = require('../../models/burger');
-
-var chai     = require('chai');
-var expect   = chai.expect;
-var should   = chai.should();
-var chaiHttp = require('chai-http');
+var helper = require('../helper');
 
 chai.use(chaiHttp);
 
@@ -42,8 +33,6 @@ describe('/GET burger -> /api/v1/burgers/:id', function() {
           expect(res).to.be.json;
           expect(res.body).to.be.an('array');
           expect(res.body).to.have.lengthOf(1);
-          console.log(res.body);
-          // expect(res.body[0][0]).to.have.any.keys('_id');
           res.body[0][0].should.have.property('_id').eql(burger.id);
           done();
         });
@@ -73,5 +62,4 @@ describe('/GET burger -> /api/v1/burgers/:id', function() {
         done();
       });
   });
-
 });
