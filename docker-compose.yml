@@ -11,6 +11,7 @@ services:
       - /burgers-api/node_modules
     depends_on:
       - "mongo"
+    restart: on-failure
 
   mongo:
     image: mongo:3.4

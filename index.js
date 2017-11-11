@@ -1,15 +1,19 @@
 'use strict';
 
+var express = require('express'),
+    app     = express(),
+    router  = express.Router();
 
-var express    = require('express'),
-    app        = express(),
-    router     = express.Router(),
-    bodyParser = require('body-parser'),
-    mongoose   = require('mongoose'),
-    config     = require('./config'),
-    rateLimit  = require('./helpers/rate_limit'),
-    useCors    = require('./helpers/cors');
-var sentry     = require('./helpers/sentry');
+var bodyParser       = require('body-parser'),
+    expressValidator = require('express-validator'),
+    helmet           = require('helmet'),
+    mongoose         = require('mongoose');
+
+var config = require('./config');
+
+var useCors   = require('./helpers/cors'),
+    rateLimit = require('./helpers/rate_limit'),
+    sentry    = require('./helpers/sentry');
 var { errorHandler, notFoundError } = require('./helpers/error_handler');
 
 var burgersRoutes = require('./routes/burgers');
@@ -22,18 +26,18 @@ mongoose.connect(config.MONGO_URL, {
 
 app.use(sentry.reqHandler());
 
-// TODO: documentation for the next 2 lines
-app.use(require('helmet')());
-app.use(require('express-validator')());
+// using helmet to secure the express app by setting various HTTP headers
+app.use(helmet());
+// express middleware for string validation
+app.use(expressValidator());
 
+// body parsing middleware
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // parse application/json
 app.use(bodyParser.json());
 
 var port = process.env.PORT || 3000;
-
-
 
 
 app.use('/api/v1/burgers', useCors(), rateLimit, burgersRoutes);
