@@ -26,7 +26,6 @@ describe('/api/v1/burgers/random', function() {
     request(app)
       .get('/api/v1/burgers/random')
       .end(function(err, res) {
-        console.log("count: " + Burger.count());
         expect(res.statusCode).to.equal(200);
         expect(res).to.be.json;
         expect(res.body).to.be.an('array');

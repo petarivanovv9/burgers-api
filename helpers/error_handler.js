@@ -20,7 +20,7 @@ function errorHandler(err, req, res, next) {
   // console.log(err);
   var boomError = Boom.boomify(err);
   if (boomError.isServer) {
-    boomError.output.payload.message = 'Something went wrong on your server, so please try again!';
+    boomError.output.payload.message = 'Something went wrong on our server, so please try again!';
   }
 
   res.status(boomError.output.statusCode);

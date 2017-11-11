@@ -94,39 +94,3 @@ describe('/GET burgers -> /api/v1/burgers', function() {
       });
   });
 });
-
-
-describe('/POST burgers -> /api/v1/burgers', function() {
-
-  beforeEach((done) => {
-    Burger.remove({}, (err) => {
-      done();
-    });
-  });
-
-  after((done) => {
-    Burger.remove({}, (err) => {
-      done();
-    });
-  });
-
-  it('should POST a burger', function(done) {
-
-    var burger = new Burger({
-      name: "testing",
-      description: "testing POST"
-    });
-
-    request(app)
-      .post('/api/v1/burgers')
-      .send(burger)
-      .end(function(err, res) {
-        expect(res.statusCode).to.equal(200);
-        expect(res).to.be.json;
-        expect(res.body).to.be.an('object');
-        expect(res.body).to.have.property('message').eql('Burger created!');
-        expect(res.body.burger).to.have.any.keys('_id', 'name', 'description');
-        done();
-      });
-  });
-});

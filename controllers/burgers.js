@@ -1,7 +1,7 @@
 'use strict';
 
 var Burger  = require('../models/burger');
-var { notFoundError, validationError } = require('../helpers/error_handler');
+var { notFoundError, validationError, errorHandler } = require('../helpers/error_handler');
 
 var schema_burger  = require('../schemas/burger');
 var schema_burgers = require('../schemas/burgers');
@@ -69,11 +69,33 @@ exports.read_a_burger = function(req, res, next) {
 
 
 // DELETE /burgers/:id -> delete a burger by id
-
+exports.delete_a_burger = function(req, res, next) {
+  Burger.findByIdAndRemove(req.params.burger_id).exec((err, burger) => {
+    if (err || !burger) {
+      next(notFoundError(`No burger found`));
+    } else {
+      res.status(200);
+      res.json({ message: "Burger deleted!", burger });
+    }
+  });
+};
 
 
 // UPDATE /burgers/:id -> update a burger by id
+exports.update_a_burger = function(req, res, next) {
+  Burger.findById({ _id: req.params.burger_id }, (err, burger) => {
+    if (err || !burger)
+      next(notFoundError(`No burger found`));
 
+    Object.assign(burger, req.body).save((err, burger) => {
+      if (err)
+        res.send(err);
+
+      res.status(200);
+      res.json({ message: 'Burger updated!', burger });
+    });
+  });
+};
 
 
 // GET /burgers/random -> read a random burger

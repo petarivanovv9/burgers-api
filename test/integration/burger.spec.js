@@ -19,7 +19,7 @@ describe('/GET burger -> /api/v1/burgers/:id', function() {
     });
   });
 
-  it('it should GET a burger by the given id', function(done) {
+  it('should GET a burger by the given id', function(done) {
     var burger = new Burger({
       name: "testing",
       description: "testing GET by id"
@@ -34,6 +34,69 @@ describe('/GET burger -> /api/v1/burgers/:id', function() {
           expect(res.body).to.be.an('array');
           expect(res.body).to.have.lengthOf(1);
           res.body[0].should.have.property('_id').eql(burger.id);
+          done();
+        });
+    });
+  });
+
+  it('should POST a burger', function(done) {
+
+    var burger = new Burger({
+      name: "testing",
+      description: "testing POST"
+    });
+
+    request(app)
+      .post('/api/v1/burgers')
+      .send(burger)
+      .end(function(err, res) {
+        expect(res.statusCode).to.equal(200);
+        expect(res).to.be.json;
+        expect(res.body).to.be.an('object');
+        expect(res.body).to.have.property('message').eql('Burger created!');
+        expect(res.body.burger).to.have.any.keys('_id', 'name', 'description');
+        done();
+      });
+  });
+
+  it('should DELETE a burger by the given id', function(done) {
+    var burger = new Burger({
+      name: "testing",
+      description: "testing GET by id"
+    });
+    burger.save(function(err, burger) {
+      request(app)
+        .delete('/api/v1/burgers/' + burger.id)
+        .end(function(err, res) {
+          expect(res.statusCode).to.equal(200);
+          expect(res).to.be.json;
+          expect(res.body).to.be.an('object');
+          expect(res.body).to.have.property('message').eql('Burger deleted!');
+          expect(res.body.burger).to.have.any.keys('_id', 'name', 'description');
+          done();
+        });
+    });
+  });
+
+  it('should PUT a burger by the given id', function(done) {
+    var burger = new Burger({
+      name: "testing",
+      description: "testing GET by id"
+    });
+    var updated_burger = new Burger({
+      name: "updated_testing"
+    })
+    burger.save(function(err, burger) {
+      request(app)
+        .put('/api/v1/burgers/' + burger.id)
+        .send(updated_burger)
+        .end(function(err, res) {
+          expect(res.statusCode).to.equal(200);
+          expect(res).to.be.json;
+          expect(res.body).to.be.an('object');
+          expect(res.body).to.have.property('message').eql('Burger updated!');
+          expect(res.body.burger).to.have.any.keys('_id', 'name', 'description');
+          expect(res.body.burger).to.have.property('name').eql('updated_testing');
           done();
         });
     });
