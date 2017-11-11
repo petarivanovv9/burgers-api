@@ -7,10 +7,10 @@ var express    = require('express'),
     bodyParser = require('body-parser'),
     mongoose   = require('mongoose'),
     config     = require('./config'),
-    rateLimit  = require('./lib/rate_limit'),
-    useCors    = require('./lib/cors');
-var sentry     = require('./lib/sentry');
-var { errorHandler, notFoundError } = require('./lib/error_handler');
+    rateLimit  = require('./helpers/rate_limit'),
+    useCors    = require('./helpers/cors');
+var sentry     = require('./helpers/sentry');
+var { errorHandler, notFoundError } = require('./helpers/error_handler');
 
 var burgersRoutes = require('./routes/burgers');
 
