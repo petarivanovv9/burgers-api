@@ -59,19 +59,33 @@ Requests that return multiple items will be limited to 25 results by default. Yo
 
 ### Get Burgers
 
-Gets burgers from the api, you can apply several filters using url paramaters, the available options are listed below.
+Gets burgers from the database, you can apply several filters using url paramaters, the available options are listed below.
 
 ```http://localhost:3000/api/v1/burgers```
 
 ### Get a Single Burger
 
-Gets a burger from the api using the burgers id.
+Gets a burger from the database using the burgers id.
 
-```http://localhost:3000/api/v1/burgers/<mongo_id>```
+```http://localhost:3000/api/v1/burgers/:burger_id```
 
 ### Post a Single Burger
 
-...
+Creates a burger in the database.
+
+```http://localhost:3000/api/v1/burgers```
+
+### Delete a Single Burger
+
+Deletes a burger from the database by burgers id.
+
+```http://localhost:3000/api/v1/burgers/:burger_id```
+
+### Update a Single Burger
+
+Updates a burger from the database by burgers id.
+
+```http://localhost:3000/api/v1/burgers/:burger_id```
 
 ### Get a Random Burger
 
