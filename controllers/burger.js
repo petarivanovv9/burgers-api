@@ -3,27 +3,15 @@
 var Burger  = require('../models/burger');
 var { notFoundError, validationError } = require('../lib/error_handler');
 
+var schema_burger  = require('../schemas/burger');
+var schema_burgers = require('../schemas/burgers');
+
 var isEmpty = require('lodash/isEmpty');
+
 
 exports.list_all_burgers = function(req, res, next) {
 
-  req.checkQuery({
-    burger_name: {
-      errorMessage: 'Must have a value and if you are using multiple words use underscores to separate',
-      optional: true,
-      notEmpty: true
-    },
-    page: {
-      errorMessage: 'Must be a number greater than 0',
-      optional: true,
-      isInt: { options: { min: 1 } }
-    },
-    per_page: {
-      errorMessage: 'Must be a number greater than 0 and less than 80',
-      optional: true,
-      isInt: { options: { min: 1, max: 80 } }
-    }
-  });
+  req.checkQuery(schema_burgers);
 
   var errors = req.validationErrors();
 
@@ -72,15 +60,7 @@ exports.read_a_random_burger = function(req, res) {
 
 exports.read_a_burger = function(req, res, next) {
 
-  req.checkParams({
-    burger_id: {
-      errorMessage: 'burger_id must be a mongoID',
-      isMongoId: function(id) {
-        var ObjectId = require('mongoose').Types.ObjectId;
-        return ObjectId.isValid(id);
-      }
-    }
-  });
+  req.checkParams(schema_burger);
 
   var errors = req.validationErrors();
 
