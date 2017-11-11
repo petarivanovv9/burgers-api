@@ -26,10 +26,24 @@ describe('/api/v1/burgers/random', function() {
     request(app)
       .get('/api/v1/burgers/random')
       .end(function(err, res) {
+        console.log("count: " + Burger.count());
         expect(res.statusCode).to.equal(200);
         expect(res).to.be.json;
         expect(res.body).to.be.an('array');
         expect(res.body[0]).to.have.any.keys('_id', 'name', 'description');
+        done();
+      });
+  });
+
+  it('should return a 404 object', function(done) {
+    request(app)
+      .get('/api/v1/burgers/random')
+      .end(function(err, res) {
+        expect(res.statusCode).to.equal(404);
+        expect(res).to.be.json;
+        expect(res.body).to.be.a('object');
+        expect(res.body).to.have.property('message').eql('No burger found');
+        expect(res.body).to.include({ statusCode: 404 });
         done();
       });
   });

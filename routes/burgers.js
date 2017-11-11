@@ -2,7 +2,6 @@
 
 var express = require('express');
 var router  = express.Router({ mergeParams: true });
-var Burger  = require('../models/burger');
 var burgerController = require('../controllers/burger');
 
 

@@ -33,7 +33,7 @@ describe('/GET burger -> /api/v1/burgers/:id', function() {
           expect(res).to.be.json;
           expect(res.body).to.be.an('array');
           expect(res.body).to.have.lengthOf(1);
-          res.body[0][0].should.have.property('_id').eql(burger.id);
+          res.body[0].should.have.property('_id').eql(burger.id);
           done();
         });
     });

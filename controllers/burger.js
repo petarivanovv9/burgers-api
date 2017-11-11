@@ -44,7 +44,7 @@ exports.read_a_random_burger = function(req, res, next) {
     if (err)
       res.send(err);
 
-    var random_number = random(0, count);
+    var random_number = random(0, count - 1);
 
     Burger.findOne().skip(random_number).exec(function(err, burger) {
       if (err || !burger) {
@@ -67,9 +67,9 @@ exports.read_a_burger = function(req, res, next) {
     return next(validationError(errors));
 
   var burger_id = req.params.burger_id;
-  Burger.find({ "_id": burger_id }, function(err, burger) {
-    if (err || isEmpty(burger)) {
-      next(notFoundError(`No burger found that matches the ID ${burger_id}`));
+  Burger.findById(burger_id).exec(function(err, burger) {
+    if (err || !burger) {
+      next(notFoundError(`No burger found`));
     } else {
       res.status(200);
       res.json([burger]);

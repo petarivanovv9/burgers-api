@@ -22,7 +22,7 @@ mongoose.connect(config.MONGO_URL, {
 
 app.use(sentry.reqHandler());
 
-// DOCUMENTATION FOR THE NEXT 2 LINES
+// TODO: documentation for the next 2 lines
 app.use(require('helmet')());
 app.use(require('express-validator')());
 

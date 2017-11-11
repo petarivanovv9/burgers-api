@@ -12,9 +12,9 @@ var should   = chai.should();
 var chaiHttp = require('chai-http');
 
 
-exports.create_some_number_of_burgers = function(number_of_burger) {
+exports.create_some_number_of_burgers = function(number_of_burgers) {
   var i;
-  for (i = 0; i < 30; i++) {
+  for (i = 0; i < number_of_burgers; i++) {
     var burger = new Burger({
       name: "testing_" + i,
       description: "testing /burgers" + i
