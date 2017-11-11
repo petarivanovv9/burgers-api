@@ -1,12 +1,26 @@
 # Burgers API
 
-## Description
-
 ## Get started
 
-### ...
+### Installation
 
-### ...
+#### Requirements
+
+- docker >= 1.32
+- docker-compose >= 1.16.1
+
+### Quick Start
+
+1. Install docker and docker-compose
+
+2. Start all services
+
+````
+$ cd <project_dir>/
+$ docker-compose up
+````
+
+That's it! You should have a working instance of the project located [here](http://localhost:3000/api/v1/).
 
 ## Documentation
 
