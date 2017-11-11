@@ -7,17 +7,16 @@ var schema_burger  = require('../schemas/burger');
 var schema_burgers = require('../schemas/burgers');
 
 var isEmpty = require('lodash/isEmpty');
+var random  = require('lodash/random');
 
 
 exports.list_all_burgers = function(req, res, next) {
-
   req.checkQuery(schema_burgers);
 
   var errors = req.validationErrors();
 
-  if (errors) {
+  if (errors)
     return next(validationError(errors));
-  }
 
   if ( ! req.query.burger_name ) {
     pagination(req, res);
@@ -40,33 +39,32 @@ exports.create_a_burger = function(req, res) {
 };
 
 
-exports.read_a_random_burger = function(req, res) {
+exports.read_a_random_burger = function(req, res, next) {
   Burger.count().exec(function(err, count) {
     if (err)
       res.send(err);
 
-    // add LODASH LIB for random func
-    var random = Math.floor(Math.random() * count);
-    Burger.findOne().skip(random).exec(function(err, result) {
-      if (err)
-        res.send(err)
+    var random_number = random(0, count);
 
-      res.status(200);
-      res.json([result]);
+    Burger.findOne().skip(random_number).exec(function(err, burger) {
+      if (err || !burger) {
+        next(notFoundError(`No burger found`));
+      } else {
+        res.status(200);
+        res.json([burger]);
+      }
     });
   });
 };
 
 
 exports.read_a_burger = function(req, res, next) {
-
   req.checkParams(schema_burger);
 
   var errors = req.validationErrors();
 
-  if (errors) {
+  if (errors)
     return next(validationError(errors));
-  }
 
   var burger_id = req.params.burger_id;
   Burger.find({ "_id": burger_id }, function(err, burger) {
